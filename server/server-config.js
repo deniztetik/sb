@@ -13,6 +13,7 @@ var session      = require('express-session');
 var app = express();
 
 var User = require('./models/user');
+var Song = require('./models/song');
 
 
 // for development
@@ -62,8 +63,9 @@ app.post('/login', function(req, res) {
           if (matches) {
             // log in
             // front-end: replace login button with logout button
-            req.session.user = user.get('id');
-            res.send(200);
+            req.session.user = {id: user.get('id'), name: user.get('name')};
+            console.log(req.session.user);
+            res.send(200, req.session.user.name);
           } else {
             //send response with flash, wrong password
             res.send(401, "wrong password!");
@@ -77,13 +79,14 @@ app.post('/login', function(req, res) {
 app.post('/signup', function(req, res) {
   var userEmail    = req.body.email;
   var userPassword = req.body.password;
+  var userName     = req.body.name;
 
   new User({email: userEmail}).fetch()
     .then(function(user) {
       if (!user) {
         // username available, add user!
         // add user to session
-        new User({email: userEmail, password: userPassword}).save();
+        new User({email: userEmail, password: userPassword, name: userName}).save();
         req.session.user = new User({email: userEmail}).fetch().get('id');
         res.send(200);
       } else {
@@ -93,9 +96,8 @@ app.post('/signup', function(req, res) {
 });
 
 //returns an array of all the sounds in foley folder
-app.get('/sounds', function (req, res) {
+app.get('/default', function (req, res) {
   fs.readdir(path.join(__dirname + '/../foley/'), function(err, files) {
-  // fs.readdir(path.join(__dirname + '/../piano/'), function(err, files) {
     if (err) console.error(err);
     res.send(files);
   });
@@ -106,6 +108,28 @@ app.get('/piano', function (req, res) {
     if (err) console.error(err);
     res.send(files);
   });
+});
+
+app.get('/presets', function(req, res) {
+  var presets = [['Null Filter', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  ['Bass Reducer', -25, -25, -25, 0, 0, 0, 0, 0, 0, 0],
+  ['Bass Booster', 25, 25, 25, 0, 0, 0, 0, 0, 0, 0]];
+  res.send(presets);
+})
+
+app.post('/saveSong', function(req,res){
+  var record = req.body.record;
+  var title = req.body.title;
+  new Song({record: record, title:title}).save();
+  res.send(200);
+});
+
+app.get('/getSonglibrary', function(req,res){
+   Song.fetchAll().then(function(data){
+    res.send(data)
+  }).catch(function(err){
+    console.error(err);
+  })
 });
 
 app.get('/defaults', function (req, res) {
@@ -133,11 +157,11 @@ app.get('/defaults', function (req, res) {
     103: "/soundfiles/pew-pew.wav",
     104: "/soundfiles/grendel.wav",
     105: "/soundfiles/derp-yell.wav",
-    106: "/soundfiles/beltbuckle.wav",
+    106: "/soundfiles/belt-buckle.wav",
     107: "/soundfiles/oh-yeah.wav",
     108: "/soundfiles/power-up.wav",
     109: "/soundfiles/straight-techno-beat.wav",
-    110: "/soundfiles/kamehameha.wav",
+    110: "/soundfiles/kame-hameha.wav",
     111: "/soundfiles/fart.wav",
     112: "/soundfiles/heavy-rain.wav",
     113: "/soundfiles/jet-whoosh.wav",

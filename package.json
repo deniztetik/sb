@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ProductivePerson/MKS-NYC-greenfield.git"
+    "url": "git+https://github.com/rebeccagray/stackol/sb.git"
   },
   "engines": {
     "node": "6.2.2"
@@ -23,10 +23,10 @@
     "music",
     "heroku"
   ],
-  "author": "Tim, Jear, Ian, James",
+  "author": "Tim, Jear, Ian, James, Nick, Deniz, Bohee, Rebecca",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ProductivePerson/MKS-NYC-greenfield/issues"
+    "url": "https://github.com/rebeccagray/stackol/sb"
   },
   "homepage": "https://github.com/ProductivePerson/MKS-NYC-greenfield#readme",
   "dependencies": {
@@ -44,9 +44,6 @@
     "jquery": "^2.2.1",
     "knex": "^0.11.9",
     "lodash": "^4.6.1",
-    "mongo": "^0.1.0",
-    "mongodb": "^2.2.1",
-    "mongoose": "^4.5.4",
     "morgan": "^1.7.0",
     "mysql": "^2.11.1",
     "passport": "^0.3.2",

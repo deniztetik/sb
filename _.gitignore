@@ -4,6 +4,9 @@
 logs
 *.log
 
+# Testing database
+server/db/sq.sqlite
+
 # Runtime data
 pids
 *.pid
