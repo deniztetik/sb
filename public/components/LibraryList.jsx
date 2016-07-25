@@ -1,8 +1,8 @@
 
 var LibraryList =({records,handleClick})=>{
 
-   var entriesToList = records.map((record) =>
-       <li className="library-list-entry" onClick={function(){ handleClick(record)} }>
+   var entriesToList = records.map((record, idx) =>
+       <li className="library-list-entry" key={idx} onClick={function(){ handleClick(record)} }>
         {record}
        </li>
     ) ;

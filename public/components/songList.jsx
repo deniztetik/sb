@@ -1,8 +1,8 @@
 
 var SongList =({songs,handleClick})=>{
 
-   var entriesToList = songs.split(',').map((song) =>
-       <li className="song-list-entry"  onClick={function(){ handleClick(entry)} }>{song}</li>
+   var entriesToList = songs.split(',').map((song,idx) =>
+       <li className="song-list-entry" key={idx} onClick={function(){ handleClick(entry)} }>{song}</li>
     ) ;
 
 
