@@ -233,14 +233,14 @@ a:active {
   margin: 0 auto;
   /*border: 2px solid black;*/
   overflow: scroll;
-  
+
   text-align: center;
   border-radius:8px;
   max-width:90%;
 }
 .rebindNode {
   display: inline-block;
- 
+
   float: left;
   border-radius: 20px;
   width: 10%;
@@ -273,7 +273,7 @@ a:active {
 
 .song-rebind-entry {
   box-shadow: 5px 5px 10px 0 black;
-  
+
 }
 
 canvas {

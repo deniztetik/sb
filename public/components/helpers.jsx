@@ -12,6 +12,8 @@ var instruments = [
   'piano'
 ]
 
+var searchResults = ['bohee'];
+
 var map = {
   default: {
     bindings: [

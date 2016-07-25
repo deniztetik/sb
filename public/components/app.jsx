@@ -11,7 +11,7 @@
 // App React class.  Contains a number of methods which control the audio, as well as rendering pretty much the whole damn app.
 var App = React.createClass({
   //declaring some states.
-  
+
   getInitialState: () => (
      {
       bindings: [],
@@ -100,10 +100,16 @@ var App = React.createClass({
     });
   },
 
-  addSearchComponent: function() {
+  searchInputClick: function() {
     var newSideModals = this.state.sideModals.concat(['searchComponent']);
     this.setState({
       sideModals: newSideModals
+    });
+  },
+
+  searchButtonClick: function() {
+    this.setState({
+      sideModals: []
     });
   },
 
@@ -149,7 +155,6 @@ var App = React.createClass({
   triggerKey: function($vKey, $audio) {
     $vKey.addClass('green pressed');
     $audio.currentTime = 0;
-
     if ($audio.paused) {
       $audio.play()
     } else {
@@ -216,10 +221,9 @@ var App = React.createClass({
              ), this)
            }
            </ul>
-           <h3> Or search for a sound here: </h3>
-           <input onClick={this.addSearchComponent}></input>
-           <button>Search</button>
        </div>
+       <Search searchInputClick={ this.searchInputClick } searchButtonClick={ this.searchButtonClick } />
+       <SearchResults />
        <InstrumentList handleClick={ this.bindTo } />
        <div id='keyboardWindow' className="keyboard">
        {
@@ -230,9 +234,9 @@ var App = React.createClass({
          )
        }
        </div>
-       <Levels/> 
+       <Levels/>
        <Library recording={this.state.record} recordNames={this.state.recordTitles.toString()} clearRecord={this.clearRecord}/>
-        
+
      </div>
    )
  }
