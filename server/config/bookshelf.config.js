@@ -1,20 +1,20 @@
 
 var path = require('path');
-var db = require('knex')({
-  client: 'sqlite3',
-  connection: {
-    host: '127.0.0.1',
-    user: 'your_database_user',
-    password: 'password',
-    database: 'soundboard',
-    charset: 'utf8',
-    filename: path.join(__dirname, '../db/sb.sqlite')
-  }
-});
 // var db = require('knex')({
-//   client: 'postgresql',
-//   connection: process.env.DATABASE_URL
+//   client: 'sqlite3',
+//   connection: {
+//     host: '127.0.0.1',
+//     user: 'your_database_user',
+//     password: 'password',
+//     database: 'soundboard',
+//     charset: 'utf8',
+//     filename: path.join(__dirname, '../db/sb.sqlite')
+//   }
 // });
+var db = require('knex')({
+  client: 'postgresql',
+  connection: process.env.DATABASE_URL
+});
 
 db.schema.hasTable('users').then(function(exists) {
   if (!exists) {
