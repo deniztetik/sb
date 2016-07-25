@@ -1,13 +1,13 @@
-# Soundboard by NaNCats | stackol
+# Middle C by stackol
 
-An interactive, online soundboard.  Built by the NaNCats: [Jim](https://github.com/logosghost), [Jear](https://github.com/Jearxj), [Ian](https://github.com/ian-culleton) and [Tim](https://github.com/ProductivePerson).
+An interactive, online soundboard.  Built by the NaNCats as SoundBoard: [Jim](https://github.com/logosghost), [Jear](https://github.com/Jearxj), [Ian](https://github.com/ian-culleton) and [Tim](https://github.com/ProductivePerson). Updated by stackol: [Rebecca](https://github.com/RebeccaGray), [Bohee](https://github.com/boheepark), [Deniz](https://github.com/deniztetik) and [Nick](https://github.com/nicholas-zeiss).
 
 ## Installation
 
-The Soundboard uses React on Node.js, which means you will need to compile using Babel.  The server is written using Express.
+Middle C uses React on Node.js, which means you will need to compile using Babel.  The server is written using Express. Additionally there is a database for users and songs using Bookshelf with Knex and Postgres.
 
 ##Heroku:
-https://invulnerable-baguette-95350.herokuapp.com/
+https://middlec.herokuapp.com/
 ### Quick Start
 
 Clone from GitHub, then run
@@ -81,5 +81,6 @@ Contains source code for the front-end elements of the app.  The components dire
  - vKey.jsx: contains the render model and some logic for dispaying and handling key presses.
 
 ### server
+Contains back-end: routes and database.
 
 Contains all the code for the back-end elements of the app.  All of these files are used as helper files for server.js.  **NOTE** the lib and model directories contain schemas and config files for a Mongoose database.  This database is currently not functional/necessary but may become so during future development.
