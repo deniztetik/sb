@@ -1,38 +1,58 @@
+/**
+ *   This file creates a levels display and equalizer for the app using the web audio api. All audio elements of the page are 
+ *   merged into one audio node, which then passes through a 10 channel equalizer implemented with 10 biquadfilters. From there
+ *   it is passed to an analyzer node which collects the data for the levels visualization
+ **/
 
 
+//  creates our state, most of the properties are initialized when the button created by this file is clicked
 var Levels = React.createClass({
 	getInitialState: function() {
 		return {
-			audioElms: null,
+			audioElms: [],
 			container: null,
 			ac: new window.AudioContext(),
 			analyzer: null,
 			filters: null,
-			width: 800,
+			width: 800,				//  for the canvas element holding the levels display
 			height: 300,
-			presets: [],
-			initialized: false
+			presets: []
 		}
 	},
 
+	//  called when the button is clicked, starts off the rest of this code to create the levels display/eq
 	startLevels: function() {
-		if (!this.state.initialized) {
-			$.get(window.location.href + "presets", function(result) {
+			$.get(window.location.href + "presets", function(result) {			//  loads the equalizer presets from the server
+				
+				
+				for (var i = 0; i < this.state.audioElms.length; i++) {
+					this.state.audioElms[i].disconnect();
+				}
+
+				var elms = $('audio');
+				var tempArray = [];
+				
+				for (var i = 0; i < elms.length; i++) {
+					var temp = this.state.ac.createMediaElementSource(elms[i]);
+					tempArray.push(temp);
+				}
+
 				this.setState({
-					audioElms: $('audio'),
+					audioElms: tempArray,
 					container: $('canvas')[0].getContext('2d'),
 					analyzer: this.state.ac.createAnalyser(),
-					presets: result,
-					initialized: true
-				}, this.checkLevels);
+					presets: result
+				}, this.checkLevels);			//  calls next function in the chain
 			}.bind(this));
-		}
+
 	}, 
 
+	//  sets up the audio node chain that implements the equalizer and levels display
 	checkLevels: function() {
 		var merge = this.state.ac.createChannelMerger(this.state.audioElms.length);
 		var tempArray = [];
 
+		//  here we create our ten biquad filters for the equalizer. filters are given frequencies/q values held by arrays in helpers.jsx
 		for (var i = 0; i < 10; i++) {
 			var temp = this.state.ac.createBiquadFilter();
 			temp.frequency.value = freq[i];
@@ -42,12 +62,13 @@ var Levels = React.createClass({
 			tempArray.push(temp);
 		}
 
+		//  merges all current audio elements into one node
 		for (var i = 0; i < this.state.audioElms.length; i++) {
-			var temp = this.state.ac.createMediaElementSource(this.state.audioElms[i]);
-			temp.connect(merge, 0, 0);
-			temp.connect(merge, 0, 1);
+			this.state.audioElms[i].connect(merge, 0, 0);
+			this.state.audioElms[i].connect(merge, 0, 1);
 		}
 
+		//  runs the audio through the equalizer and the filter
 		this.setState({filters: tempArray}, function() {
 			merge.connect(this.state.filters[0]);
 			
@@ -62,6 +83,7 @@ var Levels = React.createClass({
 		});
 	},
 
+	//  runs ever 33 ms to update the display of the current audio
 	updateLevels: function() {
 		var len = this.state.analyzer.frequencyBinCount;
 		var data = new Uint8Array(len);
@@ -83,10 +105,10 @@ var Levels = React.createClass({
     }
 	},
 
+	//  allows user to change the equalizer filter values
 	changePreset: function() {
 		for (var i = 0; i < 10; i++) {
 			this.state.filters[i].gain.value = this.state.presets[$('select').val()][i + 1];
-			console.log(i, this.state.filters[i].gain.value);
 		}
 	},
 
