@@ -12,6 +12,12 @@ var db = require('knex')({
   connection: process.env.DATABASE_URL
 });
 
+// var knex = require('knex')({            //Uncomment this to make this file work locally
+//   client: 'sqlite3',
+//   connection: {filename: './data/data.db'},
+//   useNullAsDefault: true
+// });
+
 db.schema.hasTable('users').then(function(exists) {
   if (!exists) {
     db.schema.createTable('users', function (user) {

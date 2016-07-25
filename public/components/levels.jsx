@@ -24,16 +24,18 @@ var Levels = React.createClass({
 	startLevels: function() {
 			$.get(window.location.href + "presets", function(result) {			//  loads the equalizer presets from the server
 				
-				
-				for (var i = 0; i < this.state.audioElms.length; i++) {
-					this.state.audioElms[i].disconnect();
-				}
-
-				var elms = $('audio');
 				var tempArray = [];
 				
-				for (var i = 0; i < elms.length; i++) {
-					var temp = this.state.ac.createMediaElementSource(elms[i]);
+				for (var i = 0; i < this.state.audioElms.length; i++) {				//  if the audio node has been loaded before we must disconnect it
+					this.state.audioElms[i].disconnect();												//  before using it again
+					tempArray.push(this.state.audioElms[i]);
+				}
+
+				var $elms = $('audio.unloaded');
+				$elms.attr('class', 'loaded');
+				
+				for (var i = 0; i < $elms.length; i++) {
+					var temp = this.state.ac.createMediaElementSource($elms[i]);
 					tempArray.push(temp);
 				}
 
@@ -49,7 +51,9 @@ var Levels = React.createClass({
 
 	//  sets up the audio node chain that implements the equalizer and levels display
 	checkLevels: function() {
-		var merge = this.state.ac.createChannelMerger(this.state.audioElms.length);
+		var merge = this.state.ac.createChannelMerger(32);
+		var merge2 = this.state.ac.createChannelMerger(32);
+		merge.connect(merge2);
 		var tempArray = [];
 
 		//  here we create our ten biquad filters for the equalizer. filters are given frequencies/q values held by arrays in helpers.jsx
@@ -64,13 +68,18 @@ var Levels = React.createClass({
 
 		//  merges all current audio elements into one node
 		for (var i = 0; i < this.state.audioElms.length; i++) {
-			this.state.audioElms[i].connect(merge, 0, 0);
-			this.state.audioElms[i].connect(merge, 0, 1);
+			if (i < 32) {
+				this.state.audioElms[i].connect(merge, 0, 0);
+				this.state.audioElms[i].connect(merge, 0, 1);
+			} else {
+				this.state.audioElms[i].connect(merge2, 0, 0);
+				this.state.audioElms[i].connect(merge2, 0, 1);
+			}
 		}
 
 		//  runs the audio through the equalizer and the filter
 		this.setState({filters: tempArray}, function() {
-			merge.connect(this.state.filters[0]);
+			merge2.connect(this.state.filters[0]);
 			
 			for (var i = 1; i < 10; i++) {
 				this.state.filters[i - 1].connect(this.state.filters[i]);
