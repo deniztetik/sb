@@ -40,6 +40,6 @@ jspm_packages
 .DS_store
 
 # compiled shit
-compiled
+#compiled
 server/db
 dist
