@@ -96,10 +96,16 @@ var App = React.createClass({
     });
   },
 
-  addSearchComponent: function addSearchComponent() {
+  searchInputClick: function searchInputClick() {
     var newSideModals = this.state.sideModals.concat(['searchComponent']);
     this.setState({
       sideModals: newSideModals
+    });
+  },
+
+  searchButtonClick: function searchButtonClick() {
+    this.setState({
+      sideModals: []
     });
   },
 
@@ -146,7 +152,6 @@ var App = React.createClass({
   triggerKey: function triggerKey($vKey, $audio) {
     $vKey.addClass('green pressed');
     $audio.currentTime = 0;
-
     if ($audio.paused) {
       $audio.play();
     } else {
@@ -226,19 +231,10 @@ var App = React.createClass({
               React.createElement(RebindNode, { key: idx, targetSong: sound, targetKey: _this.state.changeKey, bindings: _this.state.bindings, reRender: _this.reRender })
             );
           }, this)
-        ),
-        React.createElement(
-          "h3",
-          null,
-          " Or search for a sound here: "
-        ),
-        React.createElement("input", { onClick: this.addSearchComponent }),
-        React.createElement(
-          "button",
-          null,
-          "Search"
         )
       ),
+      React.createElement(Search, { searchInputClick: this.searchInputClick, searchButtonClick: this.searchButtonClick }),
+      React.createElement(SearchResults, null),
       React.createElement(InstrumentList, { handleClick: this.bindTo }),
       React.createElement(
         "div",
