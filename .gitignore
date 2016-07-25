@@ -40,13 +40,6 @@ jspm_packages
 .DS_store
 
 # compiled shit
-<<<<<<< 15df0e4e03d42bb9826196d4ffa5a900868aea11
-#compiled
-=======
 compiled
-<<<<<<< 97b441a30081aeaa510bcbf45d891b97a50c7eb3
->>>>>>> foo
 server/db
 dist
-=======
->>>>>>> fixed levels not listening to all the sounds
