@@ -1,1 +1,1 @@
-web: node node_modules/gulp/bin/gulp babel
+web: node node_modules/gulp/bin/gulp build
